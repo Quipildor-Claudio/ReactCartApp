@@ -1,53 +1,37 @@
 
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { CartView } from "../components/CartView";
 import { CatalogView } from "../components/CatalogView";
+import { itemsCartReducer } from "../reducer/itemsCartReducer";
 
-const initialCartItem = [
-    //  product:{},
-    //   quantity:0,
-    //   total:0
-
-];
+const initialCartItem = JSON.parse(sessionStorage.getItem('cart')) || [];
 
 export const CartApp = () => {
 
-    const [cartItems, setCartItems] = useState(initialCartItem);
+    //const [cartItems, setCartItems] = useState(initialCartItem);
+
+    const [cartItems, dispach] = useReducer(itemsCartReducer, initialCartItem);
 
     const handlerAddProductCart = (product) => {
         const hasItem = cartItems.find((i) => i.product.id === product.id);
         if (hasItem) {
-            // setCartItems([
-            //     ...cartItems.filter((i) => i.product.id !== product.id), {
-            //         product,
-            //         quantity: hasItem.quantity + 1,
-
-            //     }
-            // ]);
-
-            setCartItems(
-                cartItems.map((i) => {
-                    if (i.product.id === product.id) {
-                        i.quantity += 1;
-                    }
-                    return i;
-                }
-                )
-            )
-
+            dispach({
+                type:'UpdateQuantityProductCart',
+                payload:product
+            });
         } else {
-            setCartItems([
-                ...cartItems,
-                {
-                    product,
-                    quantity: 1,
-                }
-            ]);
+            dispach({
+                type:'AddProductCart',
+                payload:product
+            });
         }
     }
 
-    const handlerDeleteProductCard=(id)=>{
-        setCartItems([...cartItems.filter((i) => i.product.id !== id)]);
+    const handlerDeleteProductCard = (id) => {
+        dispach({
+            type:'DeleteProductCart',
+            payload:id
+        });
     }
 
     return (
@@ -56,8 +40,8 @@ export const CartApp = () => {
                 <h1>Card App</h1>
                 <div className="row">
                     <CatalogView handler={product => handlerAddProductCart(product)} />
-                    {cartItems?.length<=0||(
-                        <CartView items={cartItems} handlerDelete={handlerDeleteProductCard}/>
+                    {cartItems?.length <= 0 || (
+                        <CartView items={cartItems} handlerDelete={handlerDeleteProductCard} />
                     )}
                 </div>
 
