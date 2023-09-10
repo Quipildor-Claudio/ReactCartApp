@@ -1,8 +1,9 @@
 import React from 'react'
+import { AddProductCart, DeleteProductCart, UpdateQuantityProductCart } from "../reducer/itemsCartActions";
 
 export const itemsCartReducer = (state = [], action) => {
     switch (action.type) {
-        case 'AddProductCart':
+        case AddProductCart:
 
             return [
                 ...state,
@@ -12,7 +13,7 @@ export const itemsCartReducer = (state = [], action) => {
                 }
             ];
 
-        case 'UpdateQuantityProductCart':
+        case UpdateQuantityProductCart:
 
             return state.map((i) => {
                 if (i.product.id === action.payload.id) {
@@ -25,7 +26,7 @@ export const itemsCartReducer = (state = [], action) => {
             }
             );
 
-        case 'DeleteProductCart':
+        case DeleteProductCart:
 
             return state.filter((i) => i.product.id !== action.payload);
 
