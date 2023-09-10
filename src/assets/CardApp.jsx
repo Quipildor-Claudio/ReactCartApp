@@ -1,8 +1,8 @@
 
-import { Navigate, Route, Routes } from "react-router-dom";
-import { CartView } from "../components/CartView";
-import { CatalogView } from "../components/CatalogView";
+
 import { useItemsCart } from "../hooks/useItemsCart";
+import { NavBar } from "../components/NavBar";
+import { CartRoutes } from "../routes/CartRoutes";
 
 
 export const CartApp = () => {
@@ -10,26 +10,16 @@ export const CartApp = () => {
 
     return (
         <>
+            <NavBar />
             <div className="container my-4">
+
                 <h1>Card App</h1>
                 <div className="row">
-                    <Routes>
-                        <Route path="catalog" element={
-                            <CatalogView handler={product => handlerAddProductCart(product)} />
-                        } />
-                        <Route path="cart" element={
-                                cartItems?.length <= 0 ? 
-                                <div className="alert alert-warning"> No existen productos en el caror de compras</div> 
-                                :(
-                                    <CartView items={cartItems} handlerDelete={handlerDeleteProductCard} />
-                                )
-                        } />
-                        <Route path="/" element={ 
-                            <Navigate to={'/catalog'}/>
-                        }/>
-                    </Routes>
-                    
-                
+
+                    <CartRoutes
+                        cartItems={cartItems}
+                        handlerAddProductCart={handlerAddProductCart}
+                        handlerDeleteProductCard={handlerDeleteProductCard} />
                 </div>
 
             </div>
